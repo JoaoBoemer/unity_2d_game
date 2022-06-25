@@ -10,13 +10,19 @@ public class PlayerMovement2D : MonoBehaviour
     private float speed = 4f;
     private bool isFacingRight = true;
     public Animator animator;
-    //private bool isRunning = false;
     private bool isRunning = false;
-    private double stamina = 10;
+    private float maxStamina = 10.0f;
+    private float currentStamina;
+    private float staminaRegen = 2f;
+    private float staminaDrain = 5f;
     private bool isTired = false;
 
     [SerializeField] private Rigidbody2D rb;
 
+    void Start()
+    {
+        currentStamina = maxStamina;
+    }
     void Update()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -50,8 +56,7 @@ public class PlayerMovement2D : MonoBehaviour
         Walk();
         Running();
         Tired();
-        
-        Debug.Log(stamina);
+        Debug.Log(currentStamina);
     }
 
     private void Flip()
@@ -68,16 +73,18 @@ public class PlayerMovement2D : MonoBehaviour
     private void Running()
     {
         isRunning = Input.GetKey(KeyCode.LeftShift);
-        if(isRunning && !isTired)
+        if(isRunning && currentStamina > 0 && animator.GetFloat("Speed") == 1 && !isTired)
         {
-            stamina-=0.1;
+            currentStamina -= staminaDrain * Time.deltaTime;
             animator.SetBool("isRunning", true);
-            StopCoroutine(RegenStamina());
             speed = 6f;
         }else{
             animator.SetBool("isRunning", false);
             speed = 4f;
-            StartCoroutine(RegenStamina());
+            if(currentStamina <= maxStamina -0.01)
+            {
+                currentStamina += staminaRegen * Time.deltaTime;
+            }
         }
     }
 
@@ -86,23 +93,20 @@ public class PlayerMovement2D : MonoBehaviour
         rb.velocity = new Vector2(horizontal * speed, vertical * speed);
     }
 
-    private IEnumerator RegenStamina()
+    private void Tired()
     {
-        yield return new WaitForSeconds(5);
-        if(stamina < 10){
-            stamina += 0.1;
-            yield return new WaitForSeconds(1);
-        };
-        
-    }
-
-        private void Tired()
-    {
-        if(stamina <= 0)
+        if(currentStamina <= 0)
         {
             isTired = true;
-        } else {
+            animator.SetBool("Tired", true);
+            speed = 2f;
+        }
+        if(currentStamina >= maxStamina-0.2f)
+        {
             isTired = false;
+            animator.SetBool("Tired", false);
+            speed = 4f;
         }
     }
+
 }
