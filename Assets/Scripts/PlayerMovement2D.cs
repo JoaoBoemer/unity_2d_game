@@ -56,7 +56,6 @@ public class PlayerMovement2D : MonoBehaviour
         Walk();
         Running();
         Tired();
-        Debug.Log(currentStamina);
     }
 
     private void Flip()
@@ -85,6 +84,10 @@ public class PlayerMovement2D : MonoBehaviour
             {
                 currentStamina += staminaRegen * Time.deltaTime;
             }
+            if(isTired)
+            {
+                speed = 2f;
+            }
         }
     }
 
@@ -100,6 +103,8 @@ public class PlayerMovement2D : MonoBehaviour
             isTired = true;
             animator.SetBool("Tired", true);
             speed = 2f;
+            Debug.Log("MANJUBA");
+            Debug.Log(speed);
         }
         if(currentStamina >= maxStamina-0.2f)
         {
