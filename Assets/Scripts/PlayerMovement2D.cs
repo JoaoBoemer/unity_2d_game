@@ -56,6 +56,7 @@ public class PlayerMovement2D : MonoBehaviour
         Walk();
         Running();
         Tired();
+        Transform();
     }
 
     private void Flip()
@@ -103,8 +104,6 @@ public class PlayerMovement2D : MonoBehaviour
             isTired = true;
             animator.SetBool("Tired", true);
             speed = 2f;
-            Debug.Log("MANJUBA");
-            Debug.Log(speed);
         }
         if(currentStamina >= maxStamina-0.2f)
         {
@@ -114,4 +113,11 @@ public class PlayerMovement2D : MonoBehaviour
         }
     }
 
+    private void Transform()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            animator.SetBool("Transform", true);
+        }
+    }
 }
