@@ -16,7 +16,7 @@ public class PlayerMovement2D : MonoBehaviour
     private float staminaRegen = 2f;
     private float staminaDrain = 5f;
     private bool isTired = false;
-
+    private int whichAvatarIsOn = 1;
     [SerializeField] private Rigidbody2D rb;
 
     void Start()
@@ -56,7 +56,15 @@ public class PlayerMovement2D : MonoBehaviour
         Walk();
         Running();
         Tired();
-        Transform();
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            Transforming();
+        }
+    }
+
+    public Vector2 get_position()
+    {
+        return rb.position;
     }
 
     private void Flip()
@@ -113,11 +121,18 @@ public class PlayerMovement2D : MonoBehaviour
         }
     }
 
-    private void Transform()
+    private void Transforming()
     {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            animator.SetBool("Transform", true);
+        switch(whichAvatarIsOn){
+            case(1):
+                whichAvatarIsOn = 2;
+                animator.SetLayerWeight(1,1);
+            break;
+            case(2):
+                whichAvatarIsOn = 1;
+                animator.SetLayerWeight(1,0);
+            break;
         }
+
     }
 }
