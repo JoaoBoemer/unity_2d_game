@@ -56,10 +56,8 @@ public class PlayerMovement2D : MonoBehaviour
         Walk();
         Running();
         Tired();
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            Transforming();
-        }
+        Transforming();
+
     }
 
     public Vector2 get_position()
@@ -123,16 +121,19 @@ public class PlayerMovement2D : MonoBehaviour
 
     private void Transforming()
     {
-        switch(whichAvatarIsOn){
-            case(1):
-                whichAvatarIsOn = 2;
-                animator.SetLayerWeight(1,1);
-            break;
-            case(2):
-                whichAvatarIsOn = 1;
-                animator.SetLayerWeight(1,0);
-            break;
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            animator.SetTrigger("Exit");
+            switch(whichAvatarIsOn){
+                case(1):
+                    whichAvatarIsOn = 2;
+                    animator.SetLayerWeight(1,1);
+                break;
+                case(2):
+                    whichAvatarIsOn = 1;
+                    animator.SetLayerWeight(1,0);
+                break;
+            }
         }
-
     }
 }
